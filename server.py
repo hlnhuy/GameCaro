@@ -7,11 +7,11 @@ import random
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Khởi tạo đối tượng quản lý phòng
+
 room = GameRoom()
 
-# Các biến quản lý trạng thái ván đấu
-players = {}             # sid -> X / O
+
+players = {}             
 start_requests = set()
 replay_requests = set()
 game_started = False
@@ -21,12 +21,12 @@ roles_assigned = False
 def index():
     return render_template("index.html")
 
-# Lần up 4: Xử lý kết nối
+
 @socketio.on("connect")
 def on_connect():
     players[request.sid] = None
 
-# Lần up 5: Xử lý ngắt kết nối
+
 @socketio.on("disconnect")
 def on_disconnect():
     global roles_assigned, game_started
@@ -40,7 +40,7 @@ def on_disconnect():
         start_requests.clear()
         replay_requests.clear()
 
-# Lần up 6: Bắt đầu game và cơ chế chờ
+
 @socketio.on("start_game")
 def start_game():
     global game_started, roles_assigned
@@ -50,7 +50,7 @@ def start_game():
         emit("waiting_other_player", room=request.sid)
         return
 
-    # Lần up 7: Logic phân vai X và O ngẫu nhiên
+
     if not roles_assigned:
         sids = list(start_requests)[:2]
         random.shuffle(sids)
