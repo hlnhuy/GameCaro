@@ -7,44 +7,50 @@ import random
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+# Khởi tạo đối tượng quản lý phòng
 room = GameRoom()
 
-players = {}            # sid -> X / O
+# Các biến quản lý trạng thái ván đấu
+players = {}             # sid -> X / O
 start_requests = set()
 replay_requests = set()
 game_started = False
 roles_assigned = False
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
+# Lần up 4: Xử lý kết nối
 @socketio.on("connect")
 def on_connect():
     players[request.sid] = None
-    emit("waiting_start")
 
-
+# Lần up 5: Xử lý ngắt kết nối
 @socketio.on("disconnect")
 def on_disconnect():
+    global roles_assigned, game_started
     players.pop(request.sid, None)
     start_requests.discard(request.sid)
     replay_requests.discard(request.sid)
 
+    if len(players) < 2:
+        roles_assigned = False
+        game_started = False
+        start_requests.clear()
+        replay_requests.clear()
 
-# ===== BẮT ĐẦU GAME =====
+# Lần up 6: Bắt đầu game và cơ chế chờ
 @socketio.on("start_game")
 def start_game():
     global game_started, roles_assigned
-
     start_requests.add(request.sid)
 
     if len(start_requests) < 2:
         emit("waiting_other_player", room=request.sid)
         return
 
+    # Lần up 7: Logic phân vai X và O ngẫu nhiên
     if not roles_assigned:
         sids = list(start_requests)[:2]
         random.shuffle(sids)
@@ -59,72 +65,6 @@ def start_game():
                 sids[1]: "O"
             }
         }, broadcast=True)
-
-    room.reset_board_only()
-    game_started = True
-    start_requests.clear()
-
-    emit("turn_change", {"turn": room.current_turn}, broadcast=True)
-
-
-# ===== ĐÁNH CỜ =====
-@socketio.on("make_move")
-def make_move(data):
-    global game_started
-
-    if not game_started:
-        return
-
-    sid = request.sid
-    player = players.get(sid)
-
-    if player != room.current_turn:
-        return
-
-    x, y = data["x"], data["y"]
-
-    if room.board[x][y] is not None:
-        return
-
-    room.board[x][y] = player
-
-    emit("update_board", {
-        "x": x,
-        "y": y,
-        "player": player
-    }, broadcast=True)
-
-    if check_win(room.board, x, y):
-        room.score[player] += 1
-        game_started = False
-
-        emit("game_over", {
-            "winner": player,
-            "score": room.score
-        }, broadcast=True)
-        return
-
-    room.switch_turn()
-    emit("turn_change", {"turn": room.current_turn}, broadcast=True)
-
-
-# ===== CHƠI LẠI =====
-@socketio.on("request_replay")
-def request_replay():
-    global game_started
-
-    replay_requests.add(request.sid)
-
-    if len(replay_requests) < 2:
-        return
-
-    replay_requests.clear()
-    room.reset_board_only()
-    game_started = True
-
-    emit("reset_board", broadcast=True)
-    emit("turn_change", {"turn": room.current_turn}, broadcast=True)
-
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
