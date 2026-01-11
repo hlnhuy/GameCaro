@@ -21,3 +21,13 @@ def check_win(board, x, y):
         if count == 5:
             return True
     return False
+if __name__ == "__main__":
+    game_board = create_board()
+    # Giả lập đánh 5 quân hàng ngang sát mép
+    for i in range(5):
+        game_board[0][i] = "X"
+    
+    if check_win(game_board, 0, 4):
+        print("Player X wins!")
+    else:
+        print("No winner yet.")
