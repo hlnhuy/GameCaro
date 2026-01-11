@@ -1,37 +1,33 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Cờ Caro Online</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cờ Caro Online - Giai đoạn 2</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<h1>CỜ CARO ONLINE</h1>
+    <h1>CỜ CARO ONLINE</h1>
 
-<div id="info-bar">
-    <span id="player-left">Bạn</span>
-    <span><span id="scoreX">0</span> : <span id="scoreO">0</span></span>
-    <span id="player-right">Đối thủ</span>
-</div>
-
-<div id="board"></div>
-
-<div id="popup" class="popup hidden">
-    <div class="popup-content">
-        <h2 id="popup-message"></h2>
-        <button id="replay-btn" onclick="requestReplay()">Chơi lại</button>
+    <div id="info-bar">
+        <div id="player-left">Người chơi 1:</div>
+        <div id="score-center">
+            <span id="scoreX">0</span> : <span id="scoreO">0</span>
+        </div>
+        <div id="player-right">Người chơi 2:</div>
     </div>
-</div>
 
-<div id="start-popup" class="popup">
-    <div class="popup-content">
-        <h2>GAME CỜ CARO ONLINE</h2>
-        <button onclick="startGame()">BẮT ĐẦU</button>
+    <div id="board"></div>
+
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <h2 id="popup-message">Kết quả trận đấu</h2>
+            <button id="replay-btn">Chơi lại</button>
+        </div>
     </div>
-</div>
 
-<script src="/socket.io/socket.io.js"></script>
-<script src="/static/game.js"></script>
-<script src="/static/popup.js"></script>
+    <script src="/static/game.js"></script>
+
 </body>
 </html>
