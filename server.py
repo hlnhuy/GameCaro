@@ -66,5 +66,11 @@ def start_game():
             }
         }, broadcast=True)
 
+        room.reset_board_only()
+    game_started = True
+    start_requests.clear()
+
+    emit("turn_change", {"turn": room.current_turn}, broadcast=True)
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
