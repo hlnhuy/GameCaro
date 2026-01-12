@@ -72,5 +72,18 @@ def start_game():
 
     emit("turn_change", {"turn": room.current_turn}, broadcast=True)
 
+    @socketio.on("make_move")
+    def make_move(data):
+        global game_started
+
+    if not game_started:
+        return
+
+    sid = request.sid
+    player = players.get(sid)
+
+    if player != room.current_turn:
+        return
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
