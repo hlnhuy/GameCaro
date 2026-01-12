@@ -3,19 +3,29 @@ body {
     text-align: center;
 }
 
+
+#info-bar {
+    width: 450px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
 #board {
     display: grid;
     grid-template-columns: repeat(15, 30px);
+    margin: 20px auto;
     width: 450px;
-    margin: auto;
 }
 
 .cell {
     width: 30px;
     height: 30px;
     border: 1px solid black;
-    line-height: 30px;
     cursor: pointer;
+    line-height: 30px;
+    font-size: 18px;
 }
 
 .popup {
@@ -29,10 +39,24 @@ body {
 
 .popup-content {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
+    color: black;
+    padding: 30px 40px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 300px;
 }
 
 .hidden {
     display: none;
+}
+
+#coin {
+    font-size: 48px;
+    margin: 20px;
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
 }
