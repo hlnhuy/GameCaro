@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cờ Caro Online - Giai đoạn 2 (Tiếp theo)</title>
+    <title>Cờ Caro Online - Giai đoạn 2 (Hoàn thiện UI)</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
@@ -11,11 +11,11 @@
     <h1>CỜ CARO ONLINE</h1>
 
     <div id="info-bar">
-        <div id="player-left">Người chơi 1:</div>
+        <div id="player-left">Bạn:</div>
         <div id="score-center">
             <span id="scoreX">0</span> : <span id="scoreO">0</span>
         </div>
-        <div id="player-right">Người chơi 2:</div>
+        <div id="player-right">Đối thủ:</div>
     </div>
 
     <div id="board"></div>
@@ -23,14 +23,14 @@
     <div id="popup" class="popup hidden">
         <div class="popup-content">
             <h2 id="popup-message"></h2>
-            <button id="replay-btn">Chơi lại</button>
+            <button id="replay-btn" onclick="requestReplay()">Chơi lại</button>
         </div>
     </div>
 
     <div id="start-popup" class="popup">
         <div class="popup-content">
             <h2>🎮 GAME CỜ CARO ONLINE</h2>
-            <div id="coin">Sẵn sàng để thi đấu?</div>
+            <div id="coin">X / O</div>
             <button onclick="startGame()">BẮT ĐẦU</button>
         </div>
     </div>
