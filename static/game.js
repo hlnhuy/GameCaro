@@ -45,3 +45,12 @@ socket.on("update_board", data => {
         boardDiv.children[index].innerText = data.player;
     }
 });
+
+socket.on("turn_change", data => {
+    myTurn = (data.turn === myPlayer);
+    if (myTurn) {
+        console.log("Đến lượt bạn đánh!");
+    } else {
+        console.log("Đợi đối thủ...");
+    }
+});
