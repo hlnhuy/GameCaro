@@ -84,6 +84,19 @@ def start_game():
 
     if player != room.current_turn:
         return
+    
+    x, y = data["x"], data["y"]
+
+    if room.board[x][y] is not None:
+        return
+
+    room.board[x][y] = player
+
+    emit("update_board", {
+        "x": x,
+        "y": y,
+        "player": player
+    }, broadcast=True)
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
