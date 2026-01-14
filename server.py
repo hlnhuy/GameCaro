@@ -98,5 +98,15 @@ def start_game():
         "player": player
     }, broadcast=True)
 
+    if check_win(room.board, x, y):
+        room.score[player] += 1
+        game_started = False  
+
+        emit("game_over", {
+            "winner": player,
+            "score": room.score
+        }, broadcast=True)
+        return
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
