@@ -11,8 +11,6 @@ def check_win(board, x, y):
         count = 1 
         
         for step in [1, -1]:
-            count = 1 
-            
             nx, ny = x + dx * step, y + dy * step
             
             while 0 <= nx < BOARD_SIZE and 0 <= ny < BOARD_SIZE and board[nx][ny] == player:
@@ -23,14 +21,11 @@ def check_win(board, x, y):
             return True
             
     return False
-
-
 if __name__ == "__main__":
     game_board = create_board()
     for i in range(5, 10):
         game_board[5][i] = "X"
-    
     if check_win(game_board, 5, 7):
-        print("Win!")
+        print("Success: Win detected correctly from the middle!")
     else:
-        print("Bug: Cannot detect 5 in a row if checked from middle!")
+        print("Still has bug.")
