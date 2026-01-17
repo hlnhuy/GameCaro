@@ -9,12 +9,10 @@ class GameRoom:
         self.current_turn = "X"
 
     def switch_turn(self):
-        players = ["X", "O"]
-        new_index = 1 - players.index(self.current_turn)
-        self.current_turn = players[new_index]
+        self.current_turn = "O" if self.current_turn == "X" else "X"
 
 if _name_ == "_main_":
-    game = GameRoom()
-    print(f"Bắt đầu với: {game.current_turn}")
-    game.switch_turn()
-    print(f"Chuyển sang: {game.current_turn}")
+    room = GameRoom()
+    print(f"Game initialized. Current turn: {room.current_turn}")
+    room.switch_turn()
+    print(f"Turn switched to: {room.current_turn}")
