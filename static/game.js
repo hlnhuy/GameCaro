@@ -10,9 +10,10 @@ const size = 15;
 
 let myPlayer = null;
 let myTurn = false;
-let waitingReplay = false; 
+let waitingReplay = false;
 let gameEnded = false;
 
+// ===== TẠO BÀN CỜ =====
 for (let i = 0; i < size * size; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
@@ -28,6 +29,7 @@ for (let i = 0; i < size * size; i++) {
     boardDiv.appendChild(cell);
 }
 
+// ===== BẮT ĐẦU =====
 function startGame() {
     socket.emit("start_game");
 }
@@ -40,30 +42,53 @@ socket.on("waiting_other_player", () => {
     startPopup.style.display = "flex";
 });
 
+// ===== NHẬN QUÂN & HIỂN THỊ TRẠNG THÁI =====
 socket.on("assign_player", data => {
     myPlayer = data.players[socket.id];
     startPopup.style.display = "none";
 
+    const left = document.getElementById("player-left");
+    const right = document.getElementById("player-right");
+
     if (myPlayer === "X") {
         myTurn = true; 
-        document.getElementById("player-left").innerText = "Bạn: X";
-        document.getElementById("player-right").innerText = "Đối thủ: O";
+        left.innerText = "Bạn: X";
+        right.innerText = "Đối thủ: O";
     } else {
         myTurn = false; 
-        document.getElementById("player-left").innerText = "Bạn: O";
-        document.getElementById("player-right").innerText = "Đối thủ: X";
+        left.innerText = "Bạn: O";
+        right.innerText = "Đối thủ: X";
     }
 });
 
+// ===== UPDATE BÀN CỜ =====
 socket.on("update_board", data => {
     const index = data.x * size + data.y;
-    boardDiv.children[index].innerText = data.player;
+    const targetCell = boardDiv.children[index];
+    
+    targetCell.innerText = data.player;
+    // Tối ưu UI: Thêm màu sắc riêng cho X và O
+    targetCell.classList.add(data.player.toLowerCase()); 
 });
 
+// ===== ĐỔI LƯỢT =====
 socket.on("turn_change", data => {
     myTurn = (data.turn === myPlayer);
+    
+    // Tối ưu UX: Highlight vùng hiển thị khi đến lượt
+    const left = document.getElementById("player-left");
+    const right = document.getElementById("player-right");
+    
+    if (myTurn) {
+        left.classList.add("active-turn");
+        right.classList.remove("active-turn");
+    } else {
+        left.classList.remove("active-turn");
+        right.classList.add("active-turn");
+    }
 });
 
+// ===== KẾT THÚC GAME =====
 socket.on("game_over", data => {
     gameEnded = true;
     myTurn = false;
@@ -76,17 +101,21 @@ socket.on("game_over", data => {
     document.getElementById("scoreO").innerText = data.score.O;
 });
 
+// ===== CHƠI LẠI =====
 function requestReplay() {
     waitingReplay = true;
     replayBtn.style.display = "none";
     popupMsg.innerText = "Đang đợi đối thủ...";
-    socket.emit("request_replay");
+socket.emit("request_replay");
 }
 
+// ===== RESET BÀN =====
 socket.on("reset_board", () => {
     for (let cell of boardDiv.children) {
         cell.innerText = "";
+        cell.classList.remove("x", "o"); // Xóa màu cũ
     }
+
     waitingReplay = false;
     gameEnded = false;
     popup.classList.add("hidden");
