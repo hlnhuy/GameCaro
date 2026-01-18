@@ -82,13 +82,3 @@ function requestReplay() {
     popupMsg.innerText = "Đang đợi đối thủ...";
     socket.emit("request_replay");
 }
-
-socket.on("reset_board", () => {
-    for (let cell of boardDiv.children) {
-        cell.innerText = "";
-    }
-    waitingReplay = false;
-    gameEnded = false;
-    popup.classList.add("hidden");
-    myTurn = (myPlayer === "X");
-});
