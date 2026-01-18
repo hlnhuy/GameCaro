@@ -111,5 +111,11 @@ def start_game():
     room.switch_turn()
     emit("turn_change", {"turn": room.current_turn}, broadcast=True)
 
+@socketio.on("request_replay")
+def request_replay():
+    global game_started
+    replay_requests.add(request.sid)
+    emit("opponent_wants_replay", {"requester": request.sid}, broadcast=True, include_self=False)
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=5000, debug=True)
