@@ -1,18 +1,17 @@
-class GameRoom:
-    def __init__(self) -> None:
-        self.board = [[None for _ in range(15)] for _ in range(15)]
-        self.current_turn: str = "X"
-        self.score: dict = {"X": 0, "O": 0}
+from game_logic import create_board
 
-    def reset_board(self) -> None:
-        self.board = [[None for _ in range(15)] for _ in range(15)]
+class GameRoom:
+    def __init__(self):
+        self.score = {"X": 0, "O": 0}
+        self.start_new_match()
+
+    def start_new_match(self):
+        self.board = create_board()
         self.current_turn = "X"
 
-    def switch_turn(self) -> None:
-        self.current_turn = "O" if self.current_turn == "X" else "X"
+    def reset_board_only(self):
+        self.board = create_board()
+        self.current_turn = "X"
 
-if _name_ == "_main_":
-    game = GameRoom()
-    print(f"Board 15x15 ready. Score: {game.score}")
-    game.switch_turn()
-    print(f"Switching successful, current: {game.current_turn}")
+    def switch_turn(self):
+        self.current_turn = "O" if self.current_turn == "X" else "X"
