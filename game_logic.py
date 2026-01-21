@@ -1,17 +1,23 @@
-from game_logic import create_board
+BOARD_SIZE = 15
 
-class GameRoom:
-    def __init__(self):
-        self.score = {"X": 0, "O": 0}
-        self.start_new_match()
+def create_board():
+    return [[None]*BOARD_SIZE for _ in range(BOARD_SIZE)]
 
-    def start_new_match(self):
-        self.board = create_board()
-        self.current_turn = "X"
+def check_win(board, x, y):
+    directions = [(1,0), (0,1), (1,1), (1,-1)]
+    player = board[x][y]
 
-    def reset_board_only(self):
-        self.board = create_board()
-        self.current_turn = "X"
-
-    def switch_turn(self):
-        self.current_turn = "O" if self.current_turn == "X" else "X"
+    for dx, dy in directions:
+        count = 1
+        for step in [1, -1]:
+            nx, ny = x, y
+            while True:
+                nx += dx * step
+                ny += dy * step
+                if 0 <= nx < BOARD_SIZE and 0 <= ny < BOARD_SIZE and board[nx][ny] == player:
+                    count += 1
+                else:
+                    break
+        if count >= 5:
+            return True
+    return False
