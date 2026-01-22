@@ -1,6 +1,9 @@
 body {
     font-family: Arial;
     text-align: center;
+    background: url("/static/bg.png") no-repeat center center fixed;
+    background-size: cover;
+    color: white
 }
 
 
@@ -12,11 +15,20 @@ body {
     font-weight: bold;
 }
 
+/* ===== BỐ CỤC 3 CỘT ===== */
+#game-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px; /* khoảng cách TIME - BOARD - TURN */
+}
+
+/* ===== BÀN CỜ (KHÔNG DI DỜI) ===== */
 #board {
     display: grid;
     grid-template-columns: repeat(15, 30px);
-    margin: 20px auto;
     width: 450px;
+    background: #f9f9f9
 }
 
 .cell {
@@ -28,6 +40,33 @@ body {
     font-size: 18px;
 }
 
+/* ===== KHUNG TIME & TURN ===== */
+.side-box {
+    width: 140px;
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 12px;
+    font-weight: bold;
+    background: #f9f9f9;
+}
+h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: black  ;
+}
+#timer {
+    font-size: 20px;
+    color: red;
+    margin-top: 10px;
+}
+
+#turn-info {
+    font-size: 20px;
+    color: red;
+    margin-top: 10px;
+}
+
+/* ===== POPUP ===== */
 .popup {
     position: fixed;
     inset: 0;
