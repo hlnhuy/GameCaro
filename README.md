@@ -43,7 +43,7 @@ Game Cờ Caro Online là một ứng dụng web cho phép hai người chơi đ
 
 - Sau khi cài đặt đầy đủ thư viện, mở thư mục chứa source code và chạy lệnh trên terminal:
 
-pip install flask flask-socketi
+pip install flask flask-socketio
 
 python server.py
 

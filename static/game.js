@@ -21,8 +21,6 @@ let hasClickedStart = false;
 let timeLeft = 20;
 let timerInterval = null;
 
-
-/* ===== BOARD ===== */
 for (let i = 0; i < size * size; i++) {
     const cell = document.createElement("div");
     cell.className = "cell";
@@ -38,8 +36,6 @@ for (let i = 0; i < size * size; i++) {
     boardDiv.appendChild(cell);
 }
 
-
-/* ===== START GAME ===== */
 function startGame() {
     if (hasClickedStart) return;
 
@@ -49,8 +45,6 @@ function startGame() {
     socket.emit("start_game");
 }
 
-
-/* ===== TIMER (CHỈ HIỂN THỊ) ===== */
 function startTimer() {
     clearInterval(timerInterval);
     timeLeft = 20;
@@ -70,8 +64,6 @@ function stopTimer() {
     clearInterval(timerInterval);
 }
 
-
-/* ===== ASSIGN PLAYER ===== */
 socket.on("assign_player", data => {
     myPlayer = data.players[socket.id];
     startPopup.style.display = "none";
@@ -85,23 +77,26 @@ socket.on("assign_player", data => {
     }
 });
 
-
-/* ===== UPDATE BOARD ===== */
 socket.on("update_board", data => {
     const index = data.x * size + data.y;
-    boardDiv.children[index].innerText = data.player;
+    const cell = boardDiv.children[index];
+
+    cell.innerText = data.player;
+    cell.classList.remove("x", "o");
+
+    if (data.player === "X") {
+        cell.classList.add("x");
+    } else if (data.player === "O") {
+        cell.classList.add("o");
+    }
 });
 
-
-/* ===== TURN CHANGE ===== */
 socket.on("turn_change", data => {
     myTurn = (data.turn === myPlayer);
     turnInfoDiv.innerText = `Lượt đánh: ${data.turn}`;
     startTimer();
 });
 
-
-/* ===== GAME OVER ===== */
 socket.on("game_over", data => {
     gameEnded = true;
     myTurn = false;
@@ -116,12 +111,10 @@ socket.on("game_over", data => {
     }
 
     replayBtn.style.display = "inline-block";
-document.getElementById("scoreX").innerText = data.score.X;
+    document.getElementById("scoreX").innerText = data.score.X;
     document.getElementById("scoreO").innerText = data.score.O;
 });
 
-
-/* ===== REPLAY ===== */
 function requestReplay() {
     waitingReplay = true;
     replayBtn.style.display = "none";
@@ -129,11 +122,10 @@ function requestReplay() {
     socket.emit("request_replay");
 }
 
-
-/* ===== RESET ===== */
 socket.on("reset_board", () => {
     for (let cell of boardDiv.children) {
         cell.innerText = "";
+        cell.classList.remove("x", "o");
     }
 
     waitingReplay = false;
